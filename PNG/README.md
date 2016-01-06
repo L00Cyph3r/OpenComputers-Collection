@@ -11,3 +11,6 @@
 1. Make sure you have PHP5 installed on an accessible computer, and have access to it on the command-line
 1. Run the following command in the folder where the source-PNG is located: `php to8bit.php filename.png` (where filename.png is the image you want to convert)
 1. The copy the PNG to the HDD on your OC-Computer like you would normally do.
+####ToDo
+1. Create simple PHP-file that you can host online with forms and maybe even a folder where the images are to be placed.
+2. Then also make a simple lua-script which can download PNG's from the previous script.
