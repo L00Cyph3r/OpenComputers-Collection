@@ -27,6 +27,7 @@ local running = true
 local automode = 0
 local hours = 0
 local mins = 0
+--Uncomment the following line if you only have 1 screen connected
 gpu.bind("08dd5944-f989-405b-9094-602ff1c8e0b6")
 term.clear()
 term.setCursorBlink(false)
@@ -107,6 +108,18 @@ local function onKeyDown(opt)
     automode = 1
   end
 end
+
+function FormatSeconds(secondsArg)
+   local weeks = math.floor(secondsArg / 604800)
+   local remainder = secondsArg % 604800
+   local days = math.floor(remainder / 86400)
+   local remainder = remainder % 86400
+   local hours = math.floor(remainder / 3600)
+   local remainder = remainder % 3600
+   local minutes = math.floor(remainder / 60)
+   local seconds = remainder % 60
+   return weeks, days, hours, minutes, seconds
+end
 -------------------------------------------------------------------------------
 while running do
   tickCnt = tickCnt + 1
@@ -125,39 +138,42 @@ while running do
   end
   
   local reactorTemp = br.getCasingTemperature()
+  local fuelconsumption_tick = br.getFuelConsumedLastTick()
+  local fuelticksremaining = (br.getFuelAmount() / fuelconsumption_tick)
+  local weeks, days, hours, minutes, seconds = FormatSeconds(fuelticksremaining / 20)
   term.setCursor(1,1)
   local xoffset = 1
-  xoffset = xoffset + 1
-  xoffset = xoffset + 1
   if (br.getActive() == false) then
-    printXY(xoffset, 1,  "Reactor Status:              %s", "Inactive")
+    printXY(xoffset, 5,  "Reactor Status:              %s", "Inactive")
   else
-    printXY(xoffset, 1,  "Reactor Status:              %s", "Active  ")
+    printXY(xoffset, 5,  "Reactor Status:              %s", "Active  ")
   end
   xoffset = xoffset + 1
   if automode == 1 then
-    printXY(xoffset, 1,  "Reactor Mode:                %s", "Automatic")
+    printXY(xoffset, 5,  "Reactor Mode:                %s", "Automatic")
   else
-    printXY(xoffset, 1,  "Reactor Mode:                %s", "Manual   ")
+    printXY(xoffset, 5,  "Reactor Mode:                %s", "Manual   ")
   end
-  xoffset = xoffset + 1. printXY(xoffset, 1,  "Reactor Throttle:            %03d", math.abs(100 - br.getControlRodLevel(1)))
-  xoffset = xoffset + 1. printXY(xoffset, 1,  "Reactor Temperature:         %03d", br.getCasingTemperature())
-  xoffset = xoffset + 1. printXY(xoffset, 1,  "Reactor Fuel Current:        %03d B (%03.2f)%   ", br.getFuelAmount() / 1000, (br.getFuelAmount() / br.getFuelAmountMax() * 100))
-  xoffset = xoffset + 1. printXY(xoffset, 1,  "Reactor Fuel Maximum:        %03d B", br.getFuelAmountMax() / 1000)
-  xoffset = xoffset + 1. printXY(xoffset, 1,  "Reactor Consumption:         %04.2f mB/t", br.getFuelConsumedLastTick())
-  xoffset = xoffset + 1. printXY(xoffset, 1,   "Energy Stored                %03.3f MRF", br.getEnergyStored() / 1000 / 1000)
-  xoffset = xoffset + 1. printXY(xoffset, 1,   "Energy Last Tick             %03d KF", br.getEnergyProducedLastTick() / 1000)
+  xoffset = xoffset + 1. printXY(xoffset, 5,  "Reactor Throttle:            %03d%%            ", math.abs(100 - br.getControlRodLevel(1)))
+  xoffset = xoffset + 1. printXY(xoffset, 5,  "Reactor Temperature:         %03d             ", br.getCasingTemperature())
+  xoffset = xoffset + 1. printXY(xoffset, 5,  "Reactor Fuel Current:        %03d B (%03.2f%%) ", br.getFuelAmount() / 1000, (br.getFuelAmount() / br.getFuelAmountMax() * 100))
+  xoffset = xoffset + 1. printXY(xoffset, 5,  "Reactor Fuel Maximum:        %03d B           ", br.getFuelAmountMax() / 1000)
+  xoffset = xoffset + 1. printXY(xoffset, 5,  "Reactor Consumption:         %04.2f mB/t      ", br.getFuelConsumedLastTick())
+  xoffset = xoffset + 1. printXY(xoffset, 5,  "Energy Stored:               %03.3f MRF       ", br.getEnergyStored() / 1000 / 1000)
+  xoffset = xoffset + 1. printXY(xoffset, 5,  "Energy Last Tick:            %03d KRF         ", br.getEnergyProducedLastTick() / 1000)
+  xoffset = xoffset + 1. printXY(xoffset, 5,  "ETA before empty:            %02d Weeks, %02d days, %02d:%02d:%02d        ", weeks, days, hours, minutes, seconds)
+  
   post_data['total'] = {}
   xoffset = xoffset + 1
-  if (br.getActive() == false) then printXY(xoffset, 1,  "Reactor Status:              %s", "Active  ") else printXY(xoffset, 1,  "Reactor Status:              %s", "Active  ") end
+  if (br.getActive() == false) then printXY(xoffset, 5,  "Reactor Status:              %s", "Active  ") else printXY(xoffset, 5,  "Reactor Status:              %s", "Active  ") end
   xoffset = xoffset + 1
   xoffset = xoffset + 1.
   xoffset = xoffset + 1.
   centerF(xoffset, "Data updates every second", tickCnt)
-  xoffset = xoffset + 1. centerF(xoffset,"Current up time:                       %02d hours %02d min %02d sec", hours, mins, tickCnt)
-  xoffset = xoffset + 1. center(xoffset, "Left - Turn Reactor Off                     Right - Turn Reactor On")
-  xoffset = xoffset + 1. center(xoffset, "Up arrow - increase Thr. by 1       Down arrow - decrease Thr. by 1")
-  xoffset = xoffset + 1. center(xoffset, "Page Up - increase Thr. by 10       Page Down - decrease Thr. by 10")
+  xoffset = xoffset + 1.
+  xoffset = xoffset + 1. printXY(xoffset,5, "Left - Turn Reactor Off                      Right - Turn Reactor On")
+  xoffset = xoffset + 1. printXY(xoffset,5, "Up arrow - increase Thr. by 1        Down arrow - decrease Thr. by 1")
+  xoffset = xoffset + 1. printXY(xoffset,5, "Page Up - increase Thr. by 10        Page Down - decrease Thr. by 10")
   xoffset = xoffset + 1.
   xoffset = xoffset + 1. center(xoffset, "Press Q to quit")
   
