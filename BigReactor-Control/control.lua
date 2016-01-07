@@ -10,7 +10,6 @@ local sides = require("sides")
 local colors=require("colors")
 local internet = require("internet")
 local serial = require("serialization")
-local json = require("json")
 local post_data = {}
 local gpu=component.gpu
 local br = component.br_reactor
