@@ -139,7 +139,11 @@ while running do
   
   local reactorTemp = br.getCasingTemperature()
   local fuelconsumption_tick = br.getFuelConsumedLastTick()
-  local fuelticksremaining = (br.getFuelAmount() / fuelconsumption_tick)
+  if (fuelconsumption_tick == 0) then
+    fuelticksremaining = 0
+  else
+    local fuelticksremaining = (br.getFuelAmount() / fuelconsumption_tick)
+  end  
   local weeks, days, hours, minutes, seconds = FormatSeconds(fuelticksremaining / 20)
   term.setCursor(1,1)
   local xoffset = 1
