@@ -10,9 +10,22 @@ local sides = require("sides")
 local colors=require("colors")
 local internet = require("internet")
 local serial = require("serialization")
+local configlib = require("configlib")
+local defaultCfg = {
+  monitor_bind=false,
+  monitor_address="",
+  component_br_control_bind=false,
+  component_br_control_address=""
+}
+local config = configLib.loadConfig("br_control.cfg",defaultCfg)
 local post_data = {}
 local gpu=component.gpu
-local br = component.br_reactor
+local br
+if (config['component_br_control_bind'] == true) then
+  br = component.proxy(component.get(config['component_br_control_address'],"br_reactor"))
+else
+  br = component.br_reactor
+end
 
 local maxTemp = 5500
 
@@ -28,7 +41,10 @@ local automode = 0
 local hours = 0
 local mins = 0
 --Uncomment the following line if you only have 1 screen connected
-gpu.bind("08dd5944-f989-405b-9094-602ff1c8e0b6")
+if (config['monitor_bind'] == true) then
+  gpu.bind(config['monitor_address'])
+end
+
 term.clear()
 term.setCursorBlink(false)
 gpu.setResolution(80,25)
