@@ -10,7 +10,7 @@ function getFileFromUrl(url, path)
 		file:write(response)
 		file:close()
 	else
-		ecs.error("Could not connect to to URL address \"" .. url .. "\"")
+		print("Could not connect to to URL address \"" .. url .. "\"")
 		return
 	end
 end
@@ -36,5 +36,5 @@ function internetRequest(url)
 	end
 end
 local baseUri = "https://raw.githubusercontent.com/L00Cyph3r/"
-getFileFromUrl(baseUri .. "OpenComputers-Collection/ATC/Robot/lib/wp.lua","/usr/lib/wp.lua")
+getFileFromUrl(baseUri .. "OpenComputers-Collection/master/ATC/Robot/lib/wp.lua","/usr/lib/wp.lua")
 

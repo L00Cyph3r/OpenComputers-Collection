@@ -104,7 +104,17 @@ local function gotoWaypoint(name, f)
   end
   print("[INFO] moving to " ..name .. " at " .. x .. "," .. y .. "," .. z)
   local steps = 0
-  
+  -- at last the height
+  -- ---------------------------------
+  if yPosition < y then
+    robot.setLightColor(lightMove)
+    steps = math.floor(y) -yPosition
+    for i=1, steps do
+      robot.up()
+      yPosition = yPosition + 1;
+    end
+    robot.setLightColor(lightIdle)
+  end
   -- first the x axis (east - west)
   -- ---------------------------------
   -- calc the steps to moves
@@ -155,7 +165,19 @@ local function gotoWaypoint(name, f)
     face("south")
     robot.setLightColor(lightMove)
     for i=1, steps do
-      robot.forward()
+      if robot.forward() == true then
+      else
+        i = i - 1
+        for u=1, 4 do
+          robot.up()
+        end
+        robot.forward()
+        robot.forward()
+        for u=1, 4 do
+          robot.down()
+        end
+        i = i + 2
+      end
     end
     robot.setLightColor(lightIdle)
   elseif z < 0 then
