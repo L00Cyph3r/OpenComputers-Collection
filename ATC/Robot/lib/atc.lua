@@ -12,7 +12,7 @@ ports["comms"] = 10000
 local defaultCfg = {
   serveraddress = "https://example.com/receiver.php"
 }
-local conf = configLib.loadConfig("/etc/atc.cfg",defaultCfg)
+local conf = configLib.loadConfig("atc.cfg",defaultCfg)
 modem.open(ports["comms"])
 local atc = {}
 atc["currentActivity"] = "idle"
@@ -54,6 +54,7 @@ function atc.sendStatus()
   post_data["from"] = modem.address
   post_data["message"] = stat
   internet.request(conf.serveraddress, json:encode(post_data))
+  print("Status sent to: " .. conf.serveraddress)
 end
 
 function atc.setActivity(stat)

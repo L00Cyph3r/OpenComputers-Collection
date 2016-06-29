@@ -201,15 +201,19 @@ function wp.gotoWaypoint(x,y,z,f)
 end
 function wp.getLocation()
   local wps = nav.findWaypoints(500)
-  for k,v in ipairs(wps) do
-    if string.find(v.label,"{location={") then
-      wploc = serial.unserialize(v.label).location
-      loc = {}
-      loc['x'] = wploc.x - v.position[1]
-      loc['y'] = wploc.y - v.position[2]
-      loc['z'] = wploc.z - v.position[3]
-      return {x = loc.x,y=loc.y,z=loc.z}
+  if #wps > 0 then
+    for k,v in ipairs(wps) do
+      if string.find(v.label,"{loc={") then
+        wploc = serial.unserialize(v.label).location
+        loc = {}
+        loc['x'] = wploc.x - v.position[1]
+        loc['y'] = wploc.y - v.position[2]
+        loc['z'] = wploc.z - v.position[3]
+        return {x = loc.x,y=loc.y,z=loc.z}
+      end
     end
+  else
+    return false
   end
   if loc ~= nil then
     return loc

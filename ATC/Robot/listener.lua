@@ -45,4 +45,9 @@ local function gotowp(route)
     wp.goTo(v)
   end
 end
-event.listen("modem_message", signal)
+local function start()
+  event.listen("modem_message", signal)
+  event.timer(5,atc.sendStatus)
+  event.timer(60,atc.sendStatus, math.huge)
+end
+start()
