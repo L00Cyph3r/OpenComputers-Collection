@@ -36,7 +36,10 @@ function internetRequest(url)
 	end
 end
 local baseUri = "https://raw.githubusercontent.com/L00Cyph3r/"
-getFileFromUrl(baseUri .. "OpenComputers-Collection/master/ATC/Client/lib/interface.lua","/usr/lib/interface.lua")
+getFileFromUrl(baseUri .. "OpenComputers-Collection/master/ATC/Client/lib/interface.lua","/lib/interface.lua")
+getFileFromUrl(baseUri .. "OpenComputers-Collection/master/ATC/Client/lib/config.lua","/lib/config.lua")
+getFileFromUrl(baseUri .. "OpenComputers-Collection/master/ATC/Client/etc/atcclient.cfg","/etc/atcclient.cfg")
 getFileFromUrl(baseUri .. "OpenComputers-Collection/master/ATC/Client/lib/json.min.lua","/lib/json.lua")
+getFileFromUrl(baseUri .. "OpenComputers-Collection/master/ATC/Client/atcclient.lua","/bin/atcclient.lua")
 --getFileFromUrl(baseUri .. "OpenComputers-Collection/master/ATC/Robot/listener.lua","/home/listener.lua")
 

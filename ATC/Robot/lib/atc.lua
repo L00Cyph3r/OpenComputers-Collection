@@ -20,8 +20,8 @@ atc["currentActivity"] = "idle"
 function atc.getLocation()
   local wps = nav.findWaypoints(500)
   for k,v in ipairs(wps) do
-    if string.find(v.label,"{location={") then
-      wploc = serial.unserialize(v.label).location
+    if string.find(v.label,"{loc={") then
+      wploc = serial.unserialize(v.label).loc
       loc = {}
       loc['x'] = wploc.x - v.position[1]
       loc['y'] = wploc.y - v.position[2]

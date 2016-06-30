@@ -204,7 +204,7 @@ function wp.getLocation()
   if #wps > 0 then
     for k,v in ipairs(wps) do
       if string.find(v.label,"{loc={") then
-        wploc = serial.unserialize(v.label).location
+        wploc = serial.unserialize(v.label).loc
         loc = {}
         loc['x'] = wploc.x - v.position[1]
         loc['y'] = wploc.y - v.position[2]
