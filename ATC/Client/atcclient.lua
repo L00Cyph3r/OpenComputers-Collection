@@ -14,7 +14,8 @@ local gpu = component.gpu
 local w,h = gpu.getResolution()
 local numrobots = 0
 local defaultCfg = {
-  serveraddress = "http://exampleserver.com/getrobots.php"
+  serveraddress = "http://exampleserver.com/getrobots.php",
+  serverreceiver = "http://exampleserver.com/receiver.php"
 }
 local conf = configLib.loadConfig("atcclient.cfg",defaultCfg)
 local function downloadLatest()
@@ -56,6 +57,8 @@ local function robotDelete(address)
 end
 
 local function robotGoto(address)
+  gpu.setBackground(0x000000)
+  gpu.setForeground(0xFFFFFF)
   term.clear()
   term.write("Enter X-coordinate: ")
   local x = term.read()
@@ -66,9 +69,9 @@ local function robotGoto(address)
   if (x ~= nil and y ~= nil and z ~= nil) then
     print("Sending robot to: \nX: "..tonumber(x).." Y: "..tonumber(y).." Z: "..tonumber(z))
     modem.send(address,10000, serial.serialize({type="coords",coords={x=x,y=y,z=z}}))
-    os.sleep(2)
+    os.sleep(1)
   end
-  screenOverview()
+  --screenOverview()
 end
 
 function screenOverview()
@@ -115,6 +118,7 @@ end
 interface.clearAllObjects()
 interface.clearScreen()
 gpu.setBackground(0x000000)
+gpu.setForeground(0xFFFFFF)
 local ticks = 0
 while true do
   if ticks % 5 == 0 then

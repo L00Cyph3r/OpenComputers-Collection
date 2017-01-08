@@ -8,8 +8,8 @@ local gpu = component.gpu
 local w,h = gpu.getResolution()
 
 function API.clearScreen()
-  gpu.setForeground(colors.white,true)
-  gpu.setBackground(colors.black,true)
+  gpu.setForeground(colors.black,true)
+  gpu.setBackground(colors.white,true)
   gpu.fill(1,1,w,h," ")
 end
 
