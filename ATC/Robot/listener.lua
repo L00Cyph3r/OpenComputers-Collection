@@ -1,6 +1,7 @@
 local component = require("component")
 local computer = require("computer")
 local modem = component.modem
+local chunkloader = component.chunkloader
 local event = require("event")
 local serial = require("serialization")
 local shell = require("shell")
@@ -32,11 +33,10 @@ local function signal(_,_,from,_,_,message)
       wp.goTo(v)
     end
   elseif msg["type"] == "coords" then
+    print("Got coords-command!")
     wp.gotoWaypoint(msg["coords"].x,msg["coords"].y,msg["coords"].z)
   elseif msg["type"] == "location" then
-    print("sending status-update")
     atc.sendStatus()
-    print("status-update sent")
   end
 end
 
@@ -47,6 +47,7 @@ local function gotowp(route)
 end
 local function start()
   event.listen("modem_message", signal)
+  chunkloader.setActive(true)
   event.timer(5,atc.sendStatus)
   event.timer(60,atc.sendStatus, math.huge)
 end

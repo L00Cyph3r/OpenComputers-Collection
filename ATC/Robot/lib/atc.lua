@@ -54,7 +54,7 @@ function atc.sendStatus()
   post_data["from"] = modem.address
   post_data["message"] = stat
   internet.request(conf.serveraddress, json:encode(post_data))
-  print("Status sent to: " .. conf.serveraddress)
+  --print("Status sent to: " .. conf.serveraddress)
 end
 
 function atc.setActivity(stat)
