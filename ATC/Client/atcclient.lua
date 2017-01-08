@@ -14,7 +14,7 @@ local gpu = component.gpu
 local w,h = gpu.getResolution()
 local numrobots = 0
 local defaultCfg = {
-  serveraddress = "http://exampleserver.com/receiver.php"
+  serveraddress = "http://exampleserver.com/getrobots.php"
 }
 local conf = configLib.loadConfig("atcclient.cfg",defaultCfg)
 local function downloadLatest()
