@@ -10,6 +10,7 @@ local term = require("term")
 local json = require("json")
 local interface = require("interface")
 local configLib = require("config")
+local php = require("phpfunctions")
 local gpu = component.gpu
 local w,h = gpu.getResolution()
 local numrobots = 0
@@ -74,6 +75,22 @@ local function robotGoto(address)
   --screenOverview()
 end
 
+local function robotGoRoute(address)
+  gpu.setBackground(0x000000)
+  gpu.setForeground(0xFFFFFF)
+  term.clear()
+  term.write("Enter comma-separated list of waypoints")
+  local routestring = term.read()
+  if (routestring ~= null) then
+    local routetable = php.explode(routestring, ",")
+    print("Sending robot along route:")
+    for k,v in ipairs(routetable) do
+      print(v)
+    end
+    modem.send(address,10000, serial.serialize({type="route",route=json:encode(routetable)}))
+  end
+end
+
 function screenOverview()
   interface.newLabel("s1-screentitle","Robots",1,1,10,1,0x000000)
   local ret,robots = downloadLatest()
@@ -90,6 +107,7 @@ function screenOverview()
         interface.newLabel("s1-robot-"..k.."-name",v.modem_addr,3,yoffset,36, 1,0x000000,0x00FF00)
         interface.newButton("s1-robot-"..k.."-refresh", "Update", (w - (string.len("Update") + 2)),yoffset,(string.len("Update") + 2),1,robotRefresh,v.modem_addr,0x00FF00,0xFF0000, 1)
         interface.newButton("s1-robot-"..k.."-goto", "GoTo", (w - (string.len("GoTo    Update") + 2)),yoffset,(string.len("GoTo") + 2),1,robotGoto,v.modem_addr,0x00FF00,0xFF0000, 1)
+        interface.newButton("s1-robot-"..k.."-goto", "GoTo", (w - (string.len("GoRoute    GoTo    Update") + 2)),yoffset,(string.len("GoRoute") + 2),1,robotGoRoute,v.modem_addr,0x00FF00,0xFF0000, 1)
         interface.newButton("s1-robot-"..k.."-robotDelete", "Delete", (w - (string.len("Delete    GoTo    Update") + 2)),yoffset,(string.len("Delete") + 2),1,robotDelete,v.modem_addr,0x00FF00,0xFF0000, 1)
         
         yoffset = yoffset + 1
