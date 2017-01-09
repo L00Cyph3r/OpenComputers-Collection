@@ -29,8 +29,9 @@ local function signal(_,_,from,_,_,message)
     print("Executing: " .. msg["command"])
     shell.execute(msg["command"])
   elseif msg["type"] == "route" then
-    for k,v in pairs(msg["route"]) do
+    for k,v in ipairs(msg["route"]) do
       wp.goTo(v)
+      os.sleep(1)
     end
   elseif msg["type"] == "coords" then
     print("Got coords-command!")
@@ -48,7 +49,7 @@ end
 local function start()
   event.listen("modem_message", signal)
   chunkloader.setActive(true)
-  event.timer(5,atc.sendStatus)
-  event.timer(60,atc.sendStatus, math.huge)
+  event.timer(1,atc.sendStatus)
+  event.timer(30,atc.sendStatus, math.huge)
 end
 start()
