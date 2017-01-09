@@ -123,7 +123,6 @@ function wp.gotoWaypoint(x,y,z,f)
       end
     end
     robot.setLightColor(lightIdle)
-    atc.clearCurrentTarget()
     atc.setActivity("idle")
   end
   
@@ -199,6 +198,7 @@ function wp.gotoWaypoint(x,y,z,f)
     face(f)
   end
   atc.setActivity("idle")
+  atc.clearCurrentTarget()
   atc.sendStatus()
 end
 function wp.getLocation()
