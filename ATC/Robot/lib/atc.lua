@@ -50,6 +50,7 @@ function atc.sendStatus()
   stat["robot"]["lightColor"] = robot.getLightColor()
   stat["robot"]["activity"] = atc["currentActivity"]
   stat["robot"]["name"] = robot.name()
+  stat["robot"]["level"] = robot.level()
   
   post_data["type"] = "status"
   post_data["from"] = modem.address

@@ -248,6 +248,6 @@ function wp.goTo(name,f)
       end
     end
   end
-  wp.gotoWaypoint(x,y,z,f)
+  return wp.gotoWaypoint(x,y,z,f)
 end
 return wp
