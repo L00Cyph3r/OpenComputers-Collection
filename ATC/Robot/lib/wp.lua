@@ -61,7 +61,8 @@ end
 function wp.gotoWaypoint(x,y,z,f)
   robot.setLightColor(lightBusy)
   
-  print("[INFO] moving to " .. x .. "," .. y .. "," .. z)
+  --print("[INFO] moving to " .. x .. "," .. y .. "," .. z)
+  atc.setCurrentTarget(x,y,z)
   local curloc = wp.getLocation()
   x = x - curloc.x
   y = y - curloc.y
@@ -122,6 +123,7 @@ function wp.gotoWaypoint(x,y,z,f)
       end
     end
     robot.setLightColor(lightIdle)
+    atc.clearCurrentTarget()
     atc.setActivity("idle")
   end
   

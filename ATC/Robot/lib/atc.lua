@@ -16,6 +16,7 @@ local conf = configLib.loadConfig("atc.cfg",defaultCfg)
 modem.open(ports["comms"])
 local atc = {}
 atc["currentActivity"] = "idle"
+atc["currentTarget"] = nil
 
 function atc.getLocation()
   local wps = nav.findWaypoints(500)
@@ -51,7 +52,7 @@ function atc.sendStatus()
   stat["robot"]["activity"] = atc["currentActivity"]
   stat["robot"]["name"] = robot.name()
   stat["robot"]["level"] = robot.level()
-  
+  stat["robot"]["currentTarget"] = atc["currentTarget"]
   post_data["type"] = "status"
   post_data["from"] = modem.address
   post_data["message"] = stat
@@ -60,6 +61,15 @@ end
 
 function atc.setActivity(stat)
   atc["currentActivity"] = stat
+end
+function atc.setCurrentTarget(x,y,z)
+  atc["currentTarget"] = {x=x,y=y,z=z}
+end
+function atc.clearCurrentTarget()
+  atc["currentTarget"] = {}
+end
+function atc.getCurrentTarget()
+  return atc["currentTarget"]
 end
 function atc.getActivity()
   return atc["currentActivity"]
