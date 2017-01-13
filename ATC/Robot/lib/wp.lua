@@ -3,7 +3,6 @@ Great thanks to Dustpuppy for his tremendously helpfull library which I modified
 in here. Original can be found here:
 https://oc.cil.li/index.php?/topic/942-waypoint-library-for-robots/
 ]]
-
 local component = require("component")
 local robot = require("robot")
 local computer = require("computer")
@@ -59,150 +58,161 @@ function wp.setScanRange(value)
   scanRange = value
 end
 function wp.gotoWaypoint(x,y,z,f)
+  local targetX = x
+  local targetY = y
+  local targetZ = z
   robot.setLightColor(lightBusy)
-  
-  --print("[INFO] moving to " .. x .. "," .. y .. "," .. z)
   atc.setCurrentTarget(x,y,z)
-  local curloc = wp.getLocation()
-  x = x - curloc.x
-  y = y - curloc.y
-  z = z - curloc.z
-  local steps = 0
-  if yPosition < y then
-    atc.setActivity("departure")
-    atc.sendStatus()
-    robot.setLightColor(lightMove)
-    steps = math.floor(y) -yPosition
-    for i=1, steps do
-      if i % 100 == 0 then
-        atc.sendStatus()
+  local newPos = wp.getLocation()
+  while(newPos.x ~= targetX or newPos.y ~= targetY or newPos.z ~= targetZ) do
+    local curloc = wp.getLocation()
+    x = targetX - curloc.x
+    y = targetY - curloc.y
+    z = targetZ - curloc.z
+    local steps = 0
+    if yPosition < y then
+      atc.setActivity("departure")
+      atc.sendStatus()
+      robot.setLightColor(lightMove)
+      steps = math.floor(y) -yPosition
+      for i=1, steps do
+        if i % 100 == 0 then
+          atc.sendStatus()
+        end
+        robot.up()
+        yPosition = yPosition + 1;
       end
-      robot.up()
-      yPosition = yPosition + 1;
+      robot.setLightColor(lightIdle)
     end
-    robot.setLightColor(lightIdle)
-  end
-  steps = math.abs(x)
-  
-  if x > 0 then
-    atc.setActivity("cruising")
-    atc.sendStatus()
-    robot.setLightColor(lightMove)
-    face("east")
-    robot.setLightColor(lightMove)
-    for i=1, steps do
-      if i % 100 == 0 then
-        atc.sendStatus()
-      end
-      robot.forward()
-    end
-    robot.setLightColor(lightIdle)
-    atc.setActivity("idle")
-  elseif x < 0 then
-    atc.setActivity("cruising")
-    atc.sendStatus()
-    robot.setLightColor(lightMove)
-    face("west")
-    robot.setLightColor(lightMove)
-    for i=1, steps do
-      if i % 100 == 0 then
-        atc.sendStatus()
-      end
-      if robot.forward() == true then
-      else
-        i = i - 1
-        for u=1, 4 do
-          robot.up()
+    steps = math.abs(x)
+    if x > 0 then
+      atc.setActivity("cruising")
+      atc.sendStatus()
+      robot.setLightColor(lightMove)
+      face("east")
+      robot.setLightColor(lightMove)
+      for i=1, steps do
+        if i % 100 == 0 then
+          atc.sendStatus()
         end
         robot.forward()
-        robot.forward()
-        for u=1, 4 do
-          robot.down()
-        end
-        i = i + 2
       end
+      robot.setLightColor(lightIdle)
+      atc.setActivity("idle")
+    elseif x < 0 then
+      atc.setActivity("cruising")
+      atc.sendStatus()
+      robot.setLightColor(lightMove)
+      face("west")
+      robot.setLightColor(lightMove)
+      for i=1, steps do
+        if i % 100 == 0 then
+          atc.sendStatus()
+        end
+        if robot.forward() == true then
+        else
+          i = i - 1
+          for u=1, 4 do
+            robot.up()
+          end
+          robot.forward()
+          robot.forward()
+          for u=1, 4 do
+            robot.down()
+          end
+          i = i + 2
+        end
+      end
+      robot.setLightColor(lightIdle)
+      atc.setActivity("idle")
     end
-    robot.setLightColor(lightIdle)
-    atc.setActivity("idle")
-  end
-  
-  steps = math.abs(z)
-  if z > 0 then
-    atc.setActivity("cruising")
+    steps = math.abs(z)
+    if z > 0 then
+      atc.setActivity("cruising")
+      atc.sendStatus()
+      robot.setLightColor(lightMove)
+      face("south")
+      robot.setLightColor(lightMove)
+      for i=1, steps do
+        if i % 100 == 0 then
+          atc.sendStatus()
+        end
+        if robot.forward() == true then
+        else
+          i = i - 1
+          for u=1, 4 do robot.up() end
+          robot.forward()
+          robot.forward()
+          for u=1, 4 do
+            robot.down()
+          end
+          i = i + 2
+        end
+      end
+      robot.setLightColor(lightIdle)
+      atc.setActivity("idle")
+    elseif z < 0 then
+      atc.setActivity("cruising")
+      atc.sendStatus()
+      robot.setLightColor(lightMove)
+      face("north")
+      for i=1, steps do
+        if i % 100 == 0 then
+          atc.sendStatus()
+        end
+        if robot.forward() == true then
+        else
+          i = i - 1
+          for u=1, 4 do robot.up() end
+          robot.forward()
+          robot.forward()
+          for u=1, 4 do
+            robot.down()
+          end
+          i = i + 2
+        end
+      end
+      robot.setLightColor(lightIdle)
+      atc.setActivity("idle")
+    end
+    atc.setActivity("arrival")
     atc.sendStatus()
-    robot.setLightColor(lightMove)
-    face("south")
-    robot.setLightColor(lightMove)
-    for i=1, steps do
-      if i % 100 == 0 then
-        atc.sendStatus()
-      end
-      if robot.forward() == true then
-      else
-        i = i - 1
-        for u=1, 4 do
-          robot.up()
+    if yPosition > y then
+      robot.setLightColor(lightMove)
+      steps = yPosition - math.floor(y)
+      for i=1, steps do
+        if i % 100 == 0 then
+          atc.sendStatus()
         end
-        robot.forward()
-        robot.forward()
-        for u=1, 4 do
-          robot.down()
+        robot.down()
+      end
+      robot.setLightColor(lightIdle)
+      atc.setActivity("idle")
+    elseif yPosition < y then
+      robot.setLightColor(lightMove)
+      steps = math.floor(y) -yPosition
+      for i=1, steps do
+        if i % 100 == 0 then
+          atc.sendStatus()
         end
-        i = i + 2
+        robot.up()
       end
+      robot.setLightColor(lightIdle)
+      atc.setActivity("idle")
     end
-    robot.setLightColor(lightIdle)
-    atc.setActivity("idle")
-  elseif z < 0 then
-    atc.setActivity("cruising")
-    atc.sendStatus()
-    robot.setLightColor(lightMove)
-    face("north")
-    robot.setLightColor(lightMove)
-    for i=1, steps do
-      if i % 100 == 0 then
-        atc.sendStatus()
-      end
-      robot.forward()
+    yPosition = 0
+    if f then
+      face(f)
     end
-    robot.setLightColor(lightIdle)
-    atc.setActivity("idle")
-  end
-  atc.setActivity("arrival")
-  atc.sendStatus()
-  if yPosition > y then
-    robot.setLightColor(lightMove)
-    steps = yPosition - math.floor(y)
-    for i=1, steps do
-      if i % 100 == 0 then
-        atc.sendStatus()
-      end
-      robot.down()
-    end
-    robot.setLightColor(lightIdle)
-    atc.setActivity("idle")
-  elseif yPosition < y then
-    robot.setLightColor(lightMove)
-    steps = math.floor(y) -yPosition
-    for i=1, steps do
-      if i % 100 == 0 then
-        atc.sendStatus()
-      end
-      robot.up()
-    end
-    robot.setLightColor(lightIdle)
-    atc.setActivity("idle")
-  end
-  yPosition = 0
-  if f then
-    face(f)
+    newPos = wp.getLocation()
   end
   atc.setActivity("idle")
+  robot.setLightColor(lightIdle)
   atc.clearCurrentTarget()
   atc.sendStatus()
 end
 function wp.getLocation()
-  local wps = nav.findWaypoints(500)
+  local wps = nav.findWaypoints(scanRange)
   if #wps > 0 then
     for k,v in ipairs(wps) do
       if string.find(v.label,"{loc={") then
