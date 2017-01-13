@@ -50,6 +50,6 @@ local function start()
   event.listen("modem_message", signal)
   chunkloader.setActive(true)
   event.timer(1,atc.sendStatus)
-  event.timer(30,atc.sendStatus, math.huge)
+  event.timer(15,atc.sendStatus, math.huge)
 end
 start()
