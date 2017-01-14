@@ -90,10 +90,9 @@ function wp.gotoWaypoint(x,y,z,f)
       atc.sendStatus()
       robot.setLightColor(lightMove)
       face("east")
-      robot.setLightColor(lightMove)
       for i=1, steps do
-        if i % 100 == 0 then
-          atc.sendStatus()
+        if i % 10 == 0 then
+          os.sleep(0.05)
         end
         robot.forward()
       end
@@ -104,10 +103,9 @@ function wp.gotoWaypoint(x,y,z,f)
       atc.sendStatus()
       robot.setLightColor(lightMove)
       face("west")
-      robot.setLightColor(lightMove)
       for i=1, steps do
-        if i % 100 == 0 then
-          atc.sendStatus()
+        if i % 10 == 0 then
+          os.sleep(0.05)
         end
         if robot.forward() == true then
         else
@@ -130,12 +128,11 @@ function wp.gotoWaypoint(x,y,z,f)
     if z > 0 then
       atc.setActivity("cruising")
       atc.sendStatus()
-      robot.setLightColor(lightMove)
       face("south")
       robot.setLightColor(lightMove)
       for i=1, steps do
-        if i % 100 == 0 then
-          atc.sendStatus()
+        if i % 10 == 0 then
+          os.sleep(0.05)
         end
         if robot.forward() == true then
         else
@@ -239,7 +236,7 @@ function wp.goTo(name,f)
       wp.gotoWaypoint(autoCharger)
       robot.setLightColor(lightCharge)
       while computer.energy() < (computer.maxEnergy()*0.95) do		-- autocharge until 95% full
-        os.sleep(0.5)
+        os.sleep(1)
       end
       robot.setLightColor(lightIdle)
     end
