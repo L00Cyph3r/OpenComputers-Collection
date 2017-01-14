@@ -201,10 +201,10 @@ function wp.gotoWaypoint(x,y,z,f)
       atc.setActivity("idle")
     end
     yPosition = 0
+    newPos = wp.getLocation()
     if f then
       face(f)
     end
-    newPos = wp.getLocation()
   end
   atc.setActivity("idle")
   robot.setLightColor(lightIdle)
