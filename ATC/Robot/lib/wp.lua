@@ -58,9 +58,9 @@ function wp.setScanRange(value)
   scanRange = value
 end
 function wp.gotoWaypoint(x,y,z,f)
-  local targetX = x
-  local targetY = y
-  local targetZ = z
+  local targetX = tonumber(x)
+  local targetY = tonumber(y)
+  local targetZ = tonumber(z)
   robot.setLightColor(lightBusy)
   atc.setCurrentTarget(x,y,z)
   local newPos = wp.getLocation()
