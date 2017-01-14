@@ -17,7 +17,7 @@ local conf = configLib.loadConfig("/etc/atc.cfg",defaultCfg)
 modem.close(ports["comms"])
 if modem.open(ports["comms"]) == true then
 else
-  print("Could not open port: "..port["comms"])
+  print("Could not open port: "..ports["comms"])
   os.exit()
 end
 
@@ -35,7 +35,7 @@ local function signal(_,_,from,_,_,message)
     end
   elseif msg["type"] == "coords" then
     print("Got coords-command!")
-    wp.gotoWaypoint(msg["coords"].x,msg["coords"].y,msg["coords"].z)
+    wp.gotoWaypoint(msg["coords"].x,msg["coords"].y,msg["coords"].z, 'north')
   elseif msg["type"] == "location" then
     atc.sendStatus()
   end

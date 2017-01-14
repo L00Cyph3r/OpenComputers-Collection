@@ -40,23 +40,43 @@ end
 function atc.sendStatus()
   local post_data = {}
   local stat = {}
-  stat["location"] = atc.getLocation()
-  stat["computer"] = {}
-  stat["computer"]["energy"] = computer.energy()
-  stat["computer"]["maxEnergy"] = computer.maxEnergy()
-  stat["computer"]["freeMemory"] = computer.freeMemory()
-  stat["computer"]["totalMemory"] = computer.totalMemory()
-  stat["computer"]["uptime"] = computer.uptime()
-  stat["robot"] = {}
-  stat["robot"]["lightColor"] = robot.getLightColor()
-  stat["robot"]["activity"] = atc["currentActivity"]
-  stat["robot"]["name"] = robot.name()
-  stat["robot"]["level"] = robot.level()
-  stat["robot"]["currentTarget"] = atc["currentTarget"]
-  post_data["type"] = "status"
-  post_data["from"] = modem.address
-  post_data["message"] = stat
-  internet.request(conf.serveraddress, json:encode(post_data))
+  if (computer.energy() / computer.maxEnergy() > 0.01) then
+    stat["location"] = atc.getLocation()
+    stat["computer"] = {}
+    stat["computer"]["energy"] = computer.energy()
+    stat["computer"]["maxEnergy"] = computer.maxEnergy()
+    stat["computer"]["freeMemory"] = computer.freeMemory()
+    stat["computer"]["totalMemory"] = computer.totalMemory()
+    stat["computer"]["uptime"] = computer.uptime()
+    stat["robot"] = {}
+    stat["robot"]["lightColor"] = robot.getLightColor()
+    stat["robot"]["activity"] = atc["currentActivity"]
+    stat["robot"]["name"] = robot.name()
+    stat["robot"]["level"] = robot.level()
+    stat["robot"]["currentTarget"] = atc["currentTarget"]
+    post_data["type"] = "status"
+    post_data["from"] = modem.address
+    post_data["message"] = stat
+    internet.request(conf.serveraddress, json:encode(post_data))
+  else
+    stat["location"] = atc.getLocation()
+    stat["computer"] = {}
+    stat["computer"]["energy"] = computer.energy()
+    stat["computer"]["maxEnergy"] = computer.maxEnergy()
+    stat["computer"]["freeMemory"] = computer.freeMemory()
+    stat["computer"]["totalMemory"] = computer.totalMemory()
+    stat["computer"]["uptime"] = computer.uptime()
+    stat["robot"] = {}
+    stat["robot"]["lightColor"] = "FF0000"
+    stat["robot"]["activity"] = "SOS"
+    stat["robot"]["name"] = robot.name()
+    stat["robot"]["level"] = robot.level()
+    stat["robot"]["currentTarget"] = atc["currentTarget"]
+    post_data["type"] = "status"
+    post_data["from"] = modem.address
+    post_data["message"] = stat
+    internet.request(conf.serveraddress, json:encode(post_data))
+  end
 end
 
 function atc.setActivity(stat)

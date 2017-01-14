@@ -65,6 +65,7 @@ function wp.gotoWaypoint(x,y,z,f)
   atc.setCurrentTarget(x,y,z)
   local newPos = wp.getLocation()
   while(newPos.x ~= targetX or newPos.y ~= targetY or newPos.z ~= targetZ) do
+    print("Going to: " .. targetX .. " " .. targetY .. " " .. targetZ)
     local curloc = wp.getLocation()
     x = targetX - curloc.x
     y = targetY - curloc.y
@@ -199,6 +200,8 @@ function wp.gotoWaypoint(x,y,z,f)
     end
     yPosition = 0
     newPos = wp.getLocation()
+    print("newPos: " .. newPos.x .. " " ..newPos.y .. " ".. newPos.z)
+    print("target: " .. targetX .. " " .. targetY .. " " .. targetZ)
     if f then
       face(f)
     end
