@@ -95,7 +95,19 @@ function wp.gotoWaypoint(x,y,z,f)
         if i % 10 == 0 then
           os.sleep(0.05)
         end
-        robot.forward()
+        if robot.forward() == true then
+        else
+          i = i - 1
+          for u=1, 4 do
+            robot.up()
+          end
+          robot.forward()
+          robot.forward()
+          for u=1, 4 do
+            robot.down()
+          end
+          i = i + 2
+        end
       end
       robot.setLightColor(lightIdle)
       atc.setActivity("idle")
