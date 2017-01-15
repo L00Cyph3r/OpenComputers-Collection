@@ -104,7 +104,7 @@ function screenOverview()
     if ret == true then
       for k,v in ipairs(robots) do
         yoffset = yoffset + 1
-        interface.newLabel("s1-robot-"..k.."-name",v.status.robot.name,3,yoffset,36, 1,0x000000,0x00FF00)
+        interface.newLabel("s1-robot-"..k.."-name",v.status.robot.name,3,yoffset,string.len(v.status.robot.name), 1,0x000000,0x00FF00)
         interface.newButton("s1-robot-"..k.."-refresh", "Update", (w - (string.len("Update") + 2)),yoffset,(string.len("Update") + 2),1,robotRefresh,v.modem_addr,0x00FF00,0xFF0000, 1)
         interface.newButton("s1-robot-"..k.."-goto", "GoTo", (w - (string.len("GoTo    Update") + 2)),yoffset,(string.len("GoTo") + 2),1,robotGoto,v.modem_addr,0x00FF00,0xFF0000, 1)
         interface.newButton("s1-robot-"..k.."-goroute", "GoRoute", (w - (string.len("GoRoute    GoTo    Update") + 2)),yoffset,(string.len("GoRoute") + 2),1,robotGoRoute,v.modem_addr,0x00FF00,0xFF0000, 1)
@@ -127,7 +127,7 @@ function screenOverview()
           interface.newLabel("s1-robot-"..k.."-xyz","X("..v.status.location.x..") Y("..v.status.location.y..") Z("..v.status.location.z..")",20,yoffset,string.len("X("..v.status.location.x..") Y("..v.status.location.y..") Z("..v.status.location.z..")"),1,0x000000,0xFFFFFF)
         end
         --      print("  X: " .. v.status.location.x .. "  Z: " .. v.status.location.z .. "  Y: " .. v.status.location.y .."    Energy: " .. v.status.computer.batteryperc .."%    Free Mem: " .. v.status.computer.memoryperc .. "%")
-        yoffset = yoffset + 2
+        yoffset = yoffset + 1
       end
     end
   end
