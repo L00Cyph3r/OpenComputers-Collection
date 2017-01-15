@@ -104,7 +104,7 @@ function screenOverview()
     if ret == true then
       for k,v in ipairs(robots) do
         yoffset = yoffset + 1
-        interface.newLabel("s1-robot-"..k.."-name",v.modem_addr,3,yoffset,36, 1,0x000000,0x00FF00)
+        interface.newLabel("s1-robot-"..k.."-name",v.status.robot.name,3,yoffset,36, 1,0x000000,0x00FF00)
         interface.newButton("s1-robot-"..k.."-refresh", "Update", (w - (string.len("Update") + 2)),yoffset,(string.len("Update") + 2),1,robotRefresh,v.modem_addr,0x00FF00,0xFF0000, 1)
         interface.newButton("s1-robot-"..k.."-goto", "GoTo", (w - (string.len("GoTo    Update") + 2)),yoffset,(string.len("GoTo") + 2),1,robotGoto,v.modem_addr,0x00FF00,0xFF0000, 1)
         interface.newButton("s1-robot-"..k.."-goroute", "GoRoute", (w - (string.len("GoRoute    GoTo    Update") + 2)),yoffset,(string.len("GoRoute") + 2),1,robotGoRoute,v.modem_addr,0x00FF00,0xFF0000, 1)
@@ -114,9 +114,9 @@ function screenOverview()
         interface.newLabel("s1-robot-"..k.."-batterylabel","Battery  "..v.status.computer.batteryperc.."%",3,yoffset,string.len("Battery  "..v.status.computer.batteryperc.."%"),1,0x000000,0xFFFFFF)
         interface.newBar("s1-robot-"..k.."-batterybar",20,yoffset,w - 20, 1,0x00FF00,0xFF0000,v.status.computer.batteryperc)
         
-        yoffset = yoffset + 1 
-        interface.newLabel("s1-robot-"..k.."-memorylabel", "Memory   "..v.status.computer.memoryperc.."%",3,yoffset,string.len("Memory   "..v.status.computer.memoryperc.."%"),1,0x000000,0xFFFFFF)
-        interface.newBar("s1-robot-"..k.."-memorybar",20,yoffset,w - 20, 1,0x00FF00,0xFF0000,v.status.computer.memoryperc)
+--        yoffset = yoffset + 1 
+--        interface.newLabel("s1-robot-"..k.."-memorylabel", "Memory   "..v.status.computer.memoryperc.."%",3,yoffset,string.len("Memory   "..v.status.computer.memoryperc.."%"),1,0x000000,0xFFFFFF)
+--        interface.newBar("s1-robot-"..k.."-memorybar",20,yoffset,w - 20, 1,0x00FF00,0xFF0000,v.status.computer.memoryperc)
         
         yoffset = yoffset + 1 
         interface.newLabel("s1-robot-"..k.."-activitylabel","Activity: ",3,yoffset,string.len("Activity: "),1,0x000000,0xFFFFFF)
